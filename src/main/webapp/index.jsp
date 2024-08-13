@@ -11,8 +11,8 @@
 
 <div class="container">
   <div class="navbar">
-    <button class="nav-button"><a href="hello-servlet">🏠 Home</a></button>
-    <button class="nav-button"><a href="hello-servlet">여행지 정보</a></button>
+    <button class="nav-button"><a href="/">🏠 Home</a></button>
+    <button class="nav-button"><a href="/my">여행지 정보</a></button>
     <button class="nav-button"><a href="hello-servlet">리뷰 목록</a></button>
     <button class="nav-button"><a href="hello-servlet">마이 페이지</a></button>
   </div>
