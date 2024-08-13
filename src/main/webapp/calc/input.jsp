@@ -14,6 +14,7 @@
 <form action="calcResult.jsp" method="post"> <%--action, method 추가--%>
     <input type="number" name="num1">
     <input type="number" name="num1">
+    <input type="number" name="num1">
     <button type="submit">SEND</button>
 </form>
 
