@@ -11,10 +11,10 @@
 
 <div class="container">
   <div class="navbar">
-    <button class="nav-button">🏠 Home</button>
-    <button class="nav-button">여행지 정보</button>
-    <button class="nav-button">리뷰 목록</button>
-    <button class="nav-button">마이 페이지</button>
+    <button class="nav-button"><a href="hello-servlet">🏠 Home</a></button>
+    <button class="nav-button"><a href="hello-servlet">여행지 정보</a></button>
+    <button class="nav-button"><a href="hello-servlet">리뷰 목록</a></button>
+    <button class="nav-button"><a href="hello-servlet">마이 페이지</a></button>
   </div>
 
   <!-- 게시글 목록 1 -->
