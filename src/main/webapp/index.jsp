@@ -67,7 +67,5 @@
     <div class="background"></div>
   </article>
 </div>
-
-
 </body>
 </html>
