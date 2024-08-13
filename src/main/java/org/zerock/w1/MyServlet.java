@@ -16,6 +16,7 @@ public class MyServlet extends HttpServlet{
         PrintWriter out = resp.getWriter();
         out.println("<html><body>");
         out.println("<h1>My Servlet</h1>");
+        out.println("<h1>My Servlet</h1>");
         out.println("</body></html>");
     }
 }
