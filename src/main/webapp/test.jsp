@@ -12,5 +12,6 @@
 </head>
 <body>
     <h1>Test JSP PAGE</h1>
+    <h1>Test JSP PAGE</h1>
 </body>
 </html>
