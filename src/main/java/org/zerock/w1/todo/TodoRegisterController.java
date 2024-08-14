@@ -23,7 +23,7 @@ public class TodoRegisterController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        System.out.println("입력을 처리하고 목록페이지로 이동");
+        System.out.println("입력을 처리하고 목록페이지로 이동1121212121");
     }
 }
 /*레지스터컨트롤러는 특이하게도 GET/POST 모두 처리하도록 구현함.*/
