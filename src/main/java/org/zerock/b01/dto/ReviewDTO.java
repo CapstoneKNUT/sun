@@ -15,8 +15,8 @@ public class ReviewDTO {
     private String title;       // 리뷰 제목
     private String content;     // 리뷰 내용
     private String writer;      // 작성자 ID (Member의 mid 사용)
-    private LocalDateTime regDate; // 등록일
-    private LocalDateTime modDate; // 수정일
+    private LocalDateTime createdDate; // 등록일
+    private LocalDateTime modifiedDate; // 수정일
 
     // 첨부파일 이름 리스트
     private List<String> fileNames;

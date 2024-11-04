@@ -3,14 +3,14 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import './Read.css';
 
-
 function Read() {
   const { pord } = useParams();
-  const [place, setPlace] = useState(null);  // null로 초기화
+  const [place, setPlace] = useState(null);
   const [favorites, setFavorites] = useState(() => {
     const savedFavorites = localStorage.getItem('bookmarks');
     return savedFavorites ? JSON.parse(savedFavorites) : [];
   });
+  const [isContentExpanded, setIsContentExpanded] = useState(false); // 내용 확장 상태 추가
 
   useEffect(() => {
     const fetchData = async () => {
@@ -22,7 +22,7 @@ function Read() {
       }
     };
     fetchData();
-  }, [pord]);  // pord를 의존성 배열에 추가
+  }, [pord]);
 
   useEffect(() => {
     const handleStorageChange = () => {
@@ -38,7 +38,6 @@ function Read() {
     };
   }, []);
 
-  // place가 로드되지 않았을 때 로딩 메시지 표시
   if (!place) {
     return <div>로딩 중...</div>;
   }
@@ -69,32 +68,55 @@ function Read() {
     window.dispatchEvent(new Event('storage'));
   };
 
-  return (
-    <div className="detail-page">
-      <h1>{place.p_name}</h1>
-      <p>{place.p_content}</p>
-      <img src={place.p_image} alt={place.p_name} />
-      <div className="store-info">
-        <p><strong>주소:</strong> {place.p_address}</p>
-        <p><strong>연락처:</strong> {place.p_call}</p>
-        <p><strong>홈페이지:</strong> <a href={place.p_site} target="_blank" rel="noopener noreferrer">{place.p_site}</a></p>
-        <p><strong>영업시간:</strong> {place.p_opentime}</p>
-        <p><strong>주차 안내:</strong> {place.p_park}</p>
-      </div>
+  const maxLength = 300; // 최대 글자 수 설정
 
-    
-      <button className="favorite-button" onClick={toggleFavorite} style={{ position: 'relative', background: 'none', border: 'none', cursor: 'pointer' }}>
-        {isFavorite ? (
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="pink" stroke="black" width="24px" height="24px">
-            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-          </svg>
-        ) : (
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" width="24px" height="24px">
-            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-          </svg>
-        )}
-      </button>
-    </div>
+  const toggleContent = () => {
+    setIsContentExpanded(!isContentExpanded);
+  };
+
+  return (
+      <div className="detail-page">
+        <div className="header">
+          <h1>{place.p_name}</h1>
+          <p>
+            {isContentExpanded || place.p_content.length <= maxLength
+                ? place.p_content
+                : `${place.p_content.substring(0, maxLength)}...`}
+            {!isContentExpanded && place.p_content.length > maxLength && (
+                <span onClick={toggleContent} className="read-more">
+              더보기
+            </span>
+            )}
+            {isContentExpanded && (
+                <span onClick={toggleContent} className="read-less">
+              간략히
+            </span>
+            )}
+          </p>
+          <hr className="content-separator" /> {/* 구분선 추가 */}
+        </div>
+        <div className="content">
+          <img className="store-image" src={place.p_image} alt={place.p_name} />
+          <div className="store-info">
+            <p><strong>주소:</strong> {place.p_address}</p>
+            <p><strong>연락처:</strong> {place.p_call}</p>
+            <p><strong>홈페이지:</strong> <a href={place.p_site} target="_blank" rel="noopener noreferrer">{place.p_site}</a></p>
+            <p><strong>영업시간:</strong> {place.p_opentime}</p>
+            <p><strong>주차 안내:</strong> {place.p_park}</p>
+          </div>
+        </div>
+        <button className="favorite-button" onClick={toggleFavorite}>
+          {isFavorite ? (
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="pink" stroke="black" width="24px" height="24px">
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+              </svg>
+          ) : (
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" width="24px" height="24px">
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+              </svg>
+          )}
+        </button>
+      </div>
   );
 }
 
