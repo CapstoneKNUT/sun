@@ -10,7 +10,7 @@ import org.zerock.b01.service.ReviewService;
 
 
 @RestController
-@RequestMapping("/api/board")
+@RequestMapping("/api/review")
 @RequiredArgsConstructor
 public class ReviewController {
 
@@ -39,7 +39,7 @@ public class ReviewController {
     }
 
     // 리뷰 수정
-    @PutMapping("/modify")
+    @PutMapping("/edit")
     public ResponseEntity<String> modifyReview(@RequestBody ReviewDTO reviewDTO, @RequestParam String userId) {
         if (!reviewDTO.getWriter().equals(userId)) {
             return ResponseEntity.ok("You are not allowed to modify this review");

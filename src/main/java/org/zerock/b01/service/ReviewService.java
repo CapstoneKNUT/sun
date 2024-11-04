@@ -28,8 +28,8 @@ public interface ReviewService {
                 .rno(review.getRno())
                 .content(review.getContent())
                 .writer(review.getMember().getMid())
-                .regDate(review.getCreatedDate())
-                .modDate(review.getModifiedDate())
+                .createdDate(review.getCreatedDate())
+                .modifiedDate(review.getModifiedDate())
                 .build();
     }
 }
