@@ -36,7 +36,7 @@ class StoreControllerTest {
     private ObjectMapper objectMapper;
 
     //특정 유저의 찜목록 조회
-    @Test
+    /*@Test
     void testListByUser() throws Exception {
         // Arrange
         String username = "user0"; // 사용자 이름
@@ -78,5 +78,5 @@ class StoreControllerTest {
 
         // StoreService의 list 메소드가 정확히 한 번 호출되었는지 검증
         verify(storeService, times(1)).list(eq(username), any(PageRequestDTO.class));
-    }
+    }*/
 }

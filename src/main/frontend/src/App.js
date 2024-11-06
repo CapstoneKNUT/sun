@@ -11,10 +11,10 @@ import UserProfile from './pages/member/UserProfile.js';
 import { UserProvider } from './pages/member/UserContext.js';
 import JoinForm from './pages/member/JoinForm.js';
 import Modify from './pages/member/Modify.js';
-import ReviewList from './pages/review/ReviewList';
-import ReviewDetail from './pages/review/ReviewDetail';
-import ReviewForm from './pages/review/ReviewForm';
-
+import BoardList from './pages/board/BoardList.js'; // BoardList 컴포넌트
+import BoardRegister from "./pages/board/BoardRegister.js";
+import BoardModify  from "./pages/board/BoardModify.js";
+import BoardRead from "./pages/board/BoardRead";
 
 function App() {
     return (
@@ -35,11 +35,16 @@ function App() {
                     <Route path="/store/list" element={<StoreLists />} />
                     <Route path="/store/read/:sno" element={<StoreRead />} />
 
+                    <Route path="/board/list" element={<BoardList />} />
+                    <Route path="/board/register" element={<BoardRegister />} />
+                    <Route path="/board/modify/:bno" element={<BoardModify />} />
+                    <Route path="/board/read/:bno" element={<BoardRead />} />
 
-                    <Route path="/review/list" element={<ReviewList />} />
-                    <Route path="/review/read:rno" element={<ReviewDetail />} />
+                    {/* Uncomment the following lines if you want to include review routes */}
+                    {/* <Route path="/review/list" element={<ReviewList />} />
+                    <Route path="/review/read/:rno" element={<ReviewDetail />} />
                     <Route path="/review/register" element={<ReviewForm />} />
-                    <Route path="/review/edit/:rno" element={<ReviewForm />} />
+                    <Route path="/review/edit/:rno" element={<ReviewForm />} /> */}
                 </Routes>
             </Router>
         </UserProvider>

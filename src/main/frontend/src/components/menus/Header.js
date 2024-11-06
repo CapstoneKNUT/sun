@@ -25,7 +25,7 @@ function Header() {
         <Link to="/plan">일정 짜기</Link>
       </div>
       <div className='travel-info'>
-        <Link to="/review">리뷰 목록</Link>
+        <Link to="/board/list">리뷰 목록</Link>
       </div>
       <div className='travel-info'>
         <Link to="/store/list">찜 목록</Link>

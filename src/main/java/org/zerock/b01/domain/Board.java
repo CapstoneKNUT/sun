@@ -27,6 +27,7 @@ public class Board extends BaseEntity{
     @Column(length = 50, nullable = false)
     private String writer;
 
+
     public void change(String title, String content){
         this.title = title;
         this.content = content;
@@ -58,5 +59,6 @@ public class Board extends BaseEntity{
 
         this.imageSet.clear();
     }
+
 
 }

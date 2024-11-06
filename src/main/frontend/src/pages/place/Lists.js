@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import { useLocation, Link } from 'react-router-dom';
 import './Lists.css';
@@ -16,7 +16,8 @@ function Lists() {
   const [selectedSubArea, setSelectedSubArea] = useState('');
   const [keywordInput, setKeywordInput] = useState('');
   const location = useLocation();
-  const { user } = useUser(); // UserContext에서 사용자 정보 가져오기
+  const { user } = useUser();
+  const username = user ? user.username : null;
 
   const [pageRequest, setPageRequest] = useState({
     page: 1,
@@ -31,7 +32,7 @@ function Lists() {
     page: 1,
   });
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const response = await axios.get('http://localhost:8080/api/place/list', {
         params: pageRequest,
@@ -42,13 +43,13 @@ function Lists() {
         console.error('Invalid data structure received from API.');
       }
     } catch (error) {
-      console.log(error);
+      console.error('Error fetching data:', error);
     }
-  };
+  }, [pageRequest]);
 
   useEffect(() => {
     fetchData();
-  }, [pageRequest]);
+  }, [fetchData]);
 
   const handlePageChange = (pageNum) => {
     setPageRequest((prev) => ({
@@ -59,12 +60,11 @@ function Lists() {
 
   const handleSearch = async (e) => {
     e.preventDefault();
-
     const p_area = selectedArea;
     const p_subArea = selectedSubArea !== '지역 전체' ? selectedSubArea : '';
     const p_keyword = keywordInput;
 
-    setPageRequest({ ...pageRequest, page: 1 }); // 검색 시 첫 번째 페이지로 초기화
+    setPageRequest({ page: 1, size: 10 });
 
     try {
       const response = await axios.post('http://localhost:8080/api/place/list', {
@@ -76,7 +76,7 @@ function Lists() {
       });
       setResponseData(response.data);
     } catch (error) {
-      console.error('에러 발생:', error);
+      console.error('Error during search:', error);
     }
   };
 
@@ -98,39 +98,27 @@ function Lists() {
   }, [location, responseData.dtoList]);
 
   const toggleBookmark = async (pord) => {
-    if (!user) {
+    /*if (!user || !user.username) {
       alert('로그인이 필요합니다.');
       return;
-    }
+    }*/
 
-    const bookmarkItem = places.find((item) => item.pord === pord);
-    if (!bookmarkItem) {
-      console.warn('Bookmark item not found:', pord);
-      return;
-    }
-
-    const isBookmarked = bookmarks.some((bookmark) => bookmark.pord === pord);
-    const updatedBookmarks = isBookmarked
-        ? bookmarks.filter((bookmark) => bookmark.pord !== pord)
-        : [...bookmarks, bookmarkItem];
-
-    setBookmarks(updatedBookmarks);
-    localStorage.setItem('bookmarks', JSON.stringify(updatedBookmarks));
+    const username = user.username;
 
     try {
-      if (!isBookmarked) {
-        const response = await axios.post('http://localhost:8080/api/place/register', {
-          pord: bookmarkItem.pord,
-          username: user.username, // 사용자 이름을 API에 전달
-        });
-        console.log(`Bookmark added for pord: ${pord}`, response.data);
+      const response = await axios.post('http://localhost:8080/api/place/register', { pord, username });
+      if (response.status === 200) {
+        alert('북마크가 등록되었습니다.');
+        setBookmarks((prev) => [...prev, { pord }]);
+        localStorage.setItem('bookmarks', JSON.stringify([...bookmarks, { pord }]));
+      } else {
+        alert('북마크 등록에 실패했습니다.');
       }
     } catch (error) {
-      console.error('Error registering bookmark:', error.response ? error.response.data : error.message);
+      console.error('Error registering bookmark:', error);
     }
   };
 
-  // 지역 필터링
   const filteredSubArea = selectedArea
       ? area.find((a) => a.name === selectedArea)?.subArea || []
       : [];
@@ -196,40 +184,17 @@ function Lists() {
           ))}
         </ul>
 
-        <Pagination responseData={responseData} onPageChange={handlePageChange} />
+        <div className="pagination">
+          {responseData.prev && <button onClick={() => handlePageChange(responseData.page - 1)}>이전</button>}
+          {Array.from({ length: responseData.end - responseData.start + 1 }, (_, index) => (
+              <button key={index + responseData.start} onClick={() => handlePageChange(index + responseData.start)}>
+                {index + responseData.start}
+              </button>
+          ))}
+          {responseData.next && <button onClick={() => handlePageChange(responseData.page + 1)}>다음</button>}
+        </div>
       </div>
   );
 }
-
-const Pagination = ({ responseData, onPageChange }) => (
-    <div className="float-end">
-      <ul className="pagination">
-        {responseData.prev && (
-            <li className="page-item">
-              <a className="page-link" onClick={() => onPageChange(responseData.page - 1)}>
-                Previous
-              </a>
-            </li>
-        )}
-        {Array.from({ length: responseData.end - responseData.start + 1 }, (_, index) => {
-          const pageNum = responseData.start + index;
-          return (
-              <li key={pageNum} className={`page-item ${responseData.page === pageNum ? 'active' : ''}`}>
-                <a className="page-link" onClick={() => onPageChange(pageNum)}>
-                  {pageNum}
-                </a>
-              </li>
-          );
-        })}
-        {responseData.next && (
-            <li className="page-item">
-              <a className="page-link" onClick={() => onPageChange(responseData.page + 1)}>
-                Next
-              </a>
-            </li>
-        )}
-      </ul>
-    </div>
-);
 
 export default Lists;

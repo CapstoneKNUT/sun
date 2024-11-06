@@ -10,7 +10,7 @@ function ReviewForm() {
     useEffect(() => {
         if (rno) {
             const fetchReview = async () => {
-                const response = await axios.get(`/api/board/read?rno=${rno}`);
+                const response = await axios.get(`http://localhost:8080/api/board/read?rno=${rno}`);
                 setContent(response.data.content);
             };
             fetchReview();
@@ -24,10 +24,10 @@ function ReviewForm() {
 
         try {
             if (rno) {
-                await axios.put(`/api/board/modify?userId=${userId}`, reviewData);
+                await axios.put(`http://localhost:8080/api/board/modify?userId=${userId}`, reviewData);
                 alert("Review modified successfully");
             } else {
-                await axios.post(`/api/board/register?userId=${userId}`, reviewData);
+                await axios.post(`http://localhost:8080/api/board/register?userId=${userId}`, reviewData);
                 alert("Review registered successfully");
             }
             navigate("/reviews");

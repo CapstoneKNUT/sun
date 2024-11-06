@@ -28,7 +28,7 @@ public class StoreServiceImpl implements StoreService {
         this.modelMapper = modelMapper;
     }
 
-    // 페이지로 나타내기
+    /*// 페이지로 나타내기
     @Override
     public PageResponseDTO<StoreDTO> list(String username,PageRequestDTO pageRequestDTO) {
         Pageable pageable = pageRequestDTO.getPageable("sno"); // "sno" 기준으로 정렬
@@ -43,7 +43,7 @@ public class StoreServiceImpl implements StoreService {
                 .dtoList(dtoList)
                 .total((int) result.getTotalElements())
                 .build();
-    }
+    }*/
 
     // 상세페이지로 이동
     @Override
